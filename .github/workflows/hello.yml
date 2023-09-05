@@ -1,17 +1,17 @@
-# name: Say hello
-# on:
-#   push:
-#     branches:
-#       - main
+name: Say hello
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   hello_world:
-#     runs-on: ubuntu-22.04
-#     steps:
-#       - name: Echo the message
-#         run: |
-#           echo "Hola midu!"
-#       - name: Dime la fecha
-#         run: date
-#       - run: ls -l
-#       - run: echo "hola nico"
+jobs:
+  hello_world:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Echo the message
+        run: |
+          echo "Hola midu!"
+      - name: Dime la fecha
+        run: date
+      - run: ls -l
+      - run: echo "hola nico"
