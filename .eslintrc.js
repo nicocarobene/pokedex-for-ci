@@ -16,6 +16,11 @@ module.exports = {
     'ecmaVersion': 2018,
     'sourceType': 'module'
   },
+  'settings': {
+    'react': {
+      'version': 'detect' // Puedes especificar la versión de React aquí, o usar 'detect' para que ESLint la detecte automáticamente
+    }
+  },
   'plugins': [
     'react', 'jest'
   ],
@@ -24,10 +29,6 @@ module.exports = {
     'indent': [
       'error',
       2
-    ],
-    'linebreak-style': [
-      'error',
-      'windows'
     ],
     'quotes': [
       'error',
