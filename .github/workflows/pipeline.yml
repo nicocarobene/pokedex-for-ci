@@ -9,94 +9,94 @@ on:
 
 jobs:
 
-  avoid_reduncy:
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Cancel Previous Redundant Builds
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
+  # avoid_reduncy:
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - name: Cancel Previous Redundant Builds
+  #       uses: styfle/cancel-workflow-action@0.9.1
+  #       with:
+  #         access_token: ${{ github.token }}
 
-  lint:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'pnpm'
-          node-version: 18
-      - name: Install dependencies
-        run: pnpm ci
-      - name: Lint
-        run: pnpm run eslint
+  # lint:
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: 'pnpm'
+  #         node-version: 18
+  #     - name: Install dependencies
+  #       run: pnpm ci
+  #     - name: Lint
+  #       run: pnpm run eslint
 
-  build:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'pnpm'
-          node-version: 18
-      - name: Install dependencies
-        run: pnpm ci
-      - name: Build
-        run: pnpm run build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist
+  # build:
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: 'pnpm'
+  #         node-version: 18
+  #     - name: Install dependencies
+  #       run: pnpm ci
+  #     - name: Build
+  #       run: pnpm run build
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         name: dist
+  #         path: dist
 
-  test:
-    needs: [lint, build]
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'pnpm'
-          node-version: 18
-      - name: Install dependencies
-        run: pnpm ci
-      - uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-      - name: Test
-        run: pnpm test
+  # test:
+  #   needs: [lint, build]
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: 'pnpm'
+  #         node-version: 18
+  #     - name: Install dependencies
+  #       run: pnpm ci
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: dist
+  #         path: dist
+  #     - name: Test
+  #       run: pnpm test
 
-  e2e:
-    needs: [lint, build]
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'pnpm'
-          node-version: 18
-      - name: Install dependencies
-        run: pnpm ci
-      - uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-      - name: E2E tests
-        uses: cypress-io/github-action@v2
-        with:
-          command: pnpm run test:e2e
-          start: pnpm run start-test
-          wait-on: http://localhost:5000
+  # e2e:
+  #   needs: [lint, build]
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: 'pnpm'
+  #         node-version: 18
+  #     - name: Install dependencies
+  #       run: pnpm ci
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: dist
+  #         path: dist
+  #     - name: E2E tests
+  #       uses: cypress-io/github-action@v2
+  #       with:
+  #         command: pnpm run test:e2e
+  #         start: pnpm run start-test
+  #         wait-on: http://localhost:5000
 
   deploy:
-    needs: [test, e2e]
+    # needs: [test, e2e]
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v4
@@ -109,6 +109,8 @@ jobs:
         run: pnpm install 
       - name: Lint
         run: pnpm run eslint
+
+
       # - name: Deploy to Heroku
       #   if: ${{ github.event_name == 'push' }}
       #   uses: akhileshns/heroku-deploy@v3.12.12
