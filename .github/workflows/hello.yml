@@ -1,5 +1,4 @@
 name: Say hello
-
 on:
   push:
     branches:
@@ -7,7 +6,7 @@ on:
 
 jobs:
   hello_world:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Echo the message
         run: |
@@ -15,3 +14,4 @@ jobs:
       - name: Dime la fecha
         run: date
       - run: ls -l
+      - run: echo "hola nico"
