@@ -29,7 +29,13 @@ jobs:
         run: pnpm run build
       - name: Test
         run: pnpm run test 
-
+      - name: E2E test
+        uses: cypress-io/github-action@v6
+        with: 
+          command: pnpm run test:e2e
+          start: pnpm run start-test
+          wait-on: http://localhost:5000
+        
   # avoid_reduncy:
   #   runs-on: ubuntu-18.04
   #   steps:
