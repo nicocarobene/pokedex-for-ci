@@ -25,6 +25,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
       - name: Install pnpm
         run: npm install -g pnpm
       - name: Install dependecies
@@ -72,6 +79,13 @@ jobs:
           node-version: 18
       - name: Install pnpm
         run: npm install -g pnpm
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
       - name: Install dependecies
         run: pnpm install --frozen-lockfile  
       - uses: actions/download-artifact@v3
@@ -93,6 +107,13 @@ jobs:
           node-version: 18
       - name: Install pnpm
         run: npm install -g pnpm
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
       - name: Install dependecies
         run: pnpm install --frozen-lockfile  
       - uses: actions/download-artifact@v3
