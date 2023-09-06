@@ -1,24 +1,27 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { Router } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import axiosMock from 'axios'
 import { act } from 'react-dom/test-utils'
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom'
 import PokemonPage from '../src/PokemonPage'
 
 jest.mock('axios')
 
-const previous = {
-  url: 'https://pokeapi.co/api/v2/pokemon/132/',
-  name: 'ditto',
-  id: 132
-}
-const next = {
-  url: 'https://pokeapi.co/api/v2/pokemon/134/',
-  name: 'vaporeon',
-  id: 134
-}
+// const previous = {
+//   url: 'https://pokeapi.co/api/v2/pokemon/132/',
+//   name: 'ditto',
+//   id: 132
+// }
+// const next = {
+//   url: 'https://pokeapi.co/api/v2/pokemon/134/',
+//   name: 'vaporeon',
+//   id: 134
+// }
 
 const pokemonList = {
   id: 133,
@@ -71,6 +74,16 @@ const pokemonList = {
   sprites: { front_default: 'URL' }
 }
 
+const listPokemon= [
+  { id : 130, name : 'gyarados', url: 'https://pokeapi.co/api/v2/pokemon/130/' },
+  { id: 131, name: 'lapras', url: 'https://pokeapi.co/api/v2/pokemon/131/' },
+  { id: 132, name : 'ditto', url: 'https://pokeapi.co/api/v2/pokemon/132/' },
+  { id: 133, name : 'eevee', url: 'https://pokeapi.co/api/v2/pokemon/133/' },
+  { id: 134, name : 'vaporeon', url: 'https://pokeapi.co/api/v2/pokemon/134/' },
+  { id: 135, name : 'jolteon', url: 'https://pokeapi.co/api/v2/pokemon/135/' },
+  { id: 136, name : 'flareon', url: 'https://pokeapi.co/api/v2/pokemon/136/' },
+]
+
 const history = createMemoryHistory()
 
 describe('<PokemonPage />', () => {
@@ -83,9 +96,11 @@ describe('<PokemonPage />', () => {
 
     await act(async () => {
       render(
-        <Router history={history}>
-          <PokemonPage />
-        </Router>
+        <MemoryRouter initialEntries={['/pokemon/eevee']}>
+          <Routes>
+            <Route path="/pokemon/:name" element={<PokemonPage pokemonList={listPokemon} />}/>
+          </Routes>
+        </MemoryRouter>
       )
     })
 
@@ -98,9 +113,11 @@ describe('<PokemonPage />', () => {
 
     await act(async () => {
       render(
-        <Router history={history}>
-          <PokemonPage />
-        </Router>
+        <MemoryRouter initialEntries={['/pokemon/eevee']}>
+          <Routes>
+            <Route path="/pokemon/:name" element={<PokemonPage  pokemonList={listPokemon} />} />
+          </Routes>
+        </MemoryRouter>
       )
     })
 
@@ -112,9 +129,12 @@ describe('<PokemonPage />', () => {
 
     await act(async () => {
       render(
-        <Router history={history}>
-          <PokemonPage previous={previous} next={next} />
-        </Router>
+        <MemoryRouter initialEntries={['/pokemon/eevee']}>
+          <Routes>
+            <Route path="/pokemon/:name" element={<PokemonPage  pokemonList={listPokemon} />} />
+          </Routes>
+        </MemoryRouter>
+
       )
     })
 
@@ -126,10 +146,13 @@ describe('<PokemonPage />', () => {
     axiosMock.get.mockResolvedValueOnce({ data: pokemonList })
 
     await act(async () => {
+      const poke= listPokemon.find(i => i.name === 'eevee')
       render(
-        <Router history={history}>
-          <PokemonPage />
-        </Router>
+        <MemoryRouter initialEntries={['/pokemon/eevee']}>
+          <Routes>
+            <Route path="/pokemon/:name" element={<PokemonPage pokemonList={[poke]} />} />
+          </Routes>
+        </MemoryRouter>
       )
     })
 

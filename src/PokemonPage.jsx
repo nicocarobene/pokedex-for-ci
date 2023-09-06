@@ -7,9 +7,13 @@ import ErrorMessage from './ErrorMessage'
 
 const formatName = (nameWithDash) => nameWithDash.replace('-', ' ')
 
-const PokemonPage = ({ previous, next }) => {
-  const { name } = useParams()
+const PokemonPage = ({ pokemonList=[]  }) => {
+  const { name: namePokemon }= useParams()
   const { data: pokemon, error, isLoading } = useApi(`https://pokeapi.co/api/v2/pokemon/${name}`)
+  const pokemonId = pokemonList.find(({ name }) => name === namePokemon).id
+  const previous = pokemonList.find(({ id }) => id === pokemonId - 1)
+  const next = pokemonList.find(({ id }) => id === pokemonId + 1)
+  const { name } = useParams()
 
   if (isLoading) {
     return <LoadingSpinner />
