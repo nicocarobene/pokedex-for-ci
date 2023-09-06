@@ -15,7 +15,8 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
-  lint:
+
+  install:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v4
@@ -25,13 +26,25 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Restore dependencies cache
-        uses: actions/cache@v2
+          cache: 'npm'
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependecies
+        run: pnpm install --frozen-lockfile
+
+
+  lint:
+    needs: [install]
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
       - name: Install pnpm
         run: npm install -g pnpm
       - name: Install dependecies
@@ -39,7 +52,7 @@ jobs:
       - name: Lint
         run: pnpm run eslint
   build:
-    needs: [lint]
+    needs: [install , lint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,6 +62,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'npm'
       - name: Install pnpm
         run: npm install -g pnpm
       - name: Restore dependencies cache
@@ -67,7 +81,7 @@ jobs:
           name: dist
           path: dist
   test:
-    needs: [lint, build]
+    needs: [install ,lint, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -77,15 +91,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'npm'
       - name: Install pnpm
         run: npm install -g pnpm
-      - name: Restore dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
       - name: Install dependecies
         run: pnpm install --frozen-lockfile  
       - uses: actions/download-artifact@v3
@@ -95,7 +103,7 @@ jobs:
       - name: Test
         run: pnpm run test 
   e2e-test:
-    needs: [lint,build]
+    needs: [install ,lint,build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -105,15 +113,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'npm'
       - name: Install pnpm
         run: npm install -g pnpm
-      - name: Restore dependencies cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
       - name: Install dependecies
         run: pnpm install --frozen-lockfile  
       - uses: actions/download-artifact@v3
