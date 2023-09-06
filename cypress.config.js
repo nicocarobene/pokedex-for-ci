@@ -1,4 +1,7 @@
-module.exports = {
+const { defineConfig } = require('cypress')
 
-  baseUrl: 'http://localhost:5000'
-}
+module.exports = defineConfig({
+  e2e: {
+    baseUrl: 'http://localhost:5000',
+  },
+})
